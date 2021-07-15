@@ -12,10 +12,10 @@
       <p class="card__title">{{ cardInfo.name || cardInfo.title }}</p>
       <div class="card__btns">
         <div class="card__main-btns">
-          <button class="card__btn card__btn--play">
+          <button @click="watchMovie" class="card__btn card__btn--play">
             <i class="fas fa-play card__icon card__icon--play"></i>
           </button>
-          <button class="card__btn">
+          <button @click="$emit('addToList', cardInfo)" class="card__btn">
             <i class="fas fa-plus card__icon"></i>
           </button>
           <button class="card__btn">
@@ -40,7 +40,6 @@
   </div>
   <ModalComponent
     @closeModal="closeModal"
-    :isOpened="isActive"
     :cardInfo="cardInfo"
     v-if="isActive"
   />
@@ -48,27 +47,38 @@
 
 <script>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import ModalComponent from "@/components/shared/Modal.vue";
 
 export default {
   props: ["cardInfo"],
+  emits: ["addToList"],
   components: { ModalComponent },
 
   setup(props) {
     let isActive = ref(false);
+    const router = useRouter();
 
     function openModal() {
       isActive.value = true;
-      console.log(props.cardInfo);
     }
     function closeModal() {
       isActive.value = false;
+    }
+
+    function watchMovie() {
+      router.push({
+        name: "video",
+        params: { id: props.cardInfo.external_ids.imdb_id },
+      });
+      window.scrollTo(0, 0);
     }
 
     return {
       isActive,
       openModal,
       closeModal,
+      watchMovie,
     };
   },
 };
@@ -93,6 +103,12 @@ export default {
     position: absolute;
     top: 0;
     @include font-size(12);
+    @include mq("tablet", max) {
+      @include font-size(10);
+    }
+    @include mq("small", max) {
+      @include font-size(8);
+    }
   }
   &__img {
     width: 100%;
@@ -112,7 +128,7 @@ export default {
   }
   &__info {
     display: none;
-    padding: 5px 0 5px 10px;
+    padding: 3px 0 3px 10px;
   }
   &__btn {
     display: flex;
@@ -124,14 +140,26 @@ export default {
     border-radius: 50%;
     background: transparent;
     cursor: pointer;
+    @include font-size(10);
     border: 1px solid $color-white;
     &--play {
       background: $color-white;
     }
+    @include mq("desktop", max) {
+      width: 20px;
+      height: 20px;
+      @include font-size(8);
+    }
+    @include mq("small", max) {
+      width: 15px;
+      height: 15px;
+      margin-right: 5px;
+
+      @include font-size(5);
+    }
   }
   &__icon {
     color: $color-white;
-    @include font-size(10);
     &--play {
       color: $color-background;
       margin-left: 2px;
@@ -147,6 +175,12 @@ export default {
   &__genre {
     color: $color-white;
     @include font-size(10);
+    @include mq("desktop", max) {
+      @include font-size(8);
+    }
+    @include mq("small", max) {
+      @include font-size(6);
+    }
     &-dot {
       color: $color-white;
       @include font-size(2);

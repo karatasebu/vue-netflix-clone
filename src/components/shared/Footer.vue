@@ -71,6 +71,9 @@ export default {
   max-width: 1040px;
   margin: 0 auto;
   padding: 15px 40px;
+  @include mq("mobile", max) {
+    text-align: center;
+  }
 
   &__links {
     display: flex;
@@ -88,6 +91,9 @@ export default {
     }
     @include mq("small", max) {
       width: 160px;
+    }
+    @include mq("mobile", max) {
+      margin: auto;
     }
   }
   &__link {

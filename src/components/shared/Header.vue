@@ -1,7 +1,10 @@
 <template>
   <header :class="[{ 'header--bg': isScrolled }, 'header']">
     <nav class="header__nav">
-      <router-link class="header__link header__link--logo" to="/"
+      <router-link
+        @click="scrollTop"
+        class="header__link header__link--logo"
+        to="/"
         ><svg
           class="header__link-icon"
           xmlns="http://www.w3.org/2000/svg"
@@ -19,27 +22,39 @@
           <div class="header__account-arrow"></div>
         </div>
         <div class="header__links">
-          <router-link class="header__link" to="/">Home</router-link>
-          <router-link class="header__link" to="/shows">TV Shows</router-link>
-          <router-link class="header__link" to="/movies">Movies</router-link>
-          <router-link class="header__link" to="/popular"
+          <router-link @click="scrollTop" class="header__link" to="/"
+            >Home</router-link
+          >
+          <router-link @click="scrollTop" class="header__link" to="/shows"
+            >TV Shows</router-link
+          >
+          <router-link @click="scrollTop" class="header__link" to="/movies"
+            >Movies</router-link
+          >
+          <router-link @click="scrollTop" class="header__link" to="/popular"
             >New & Popular</router-link
           >
-          <router-link class="header__link" to="/my-list">My List</router-link>
+          <router-link @click="scrollTop" class="header__link" to="/my-list"
+            >My List</router-link
+          >
         </div>
       </div>
     </nav>
     <div class="header__settings">
       <div @click="getFocus" class="header__search">
-        <input
-          ref="searchRef"
-          id="myTextField"
-          name="search"
-          autocomplete="off"
-          placeholder="Titles, people, genres"
-          class="header__input"
-          type="text"
-        />
+        <form @submit.prevent>
+          <input
+            v-model="search"
+            ref="searchRef"
+            id="textField"
+            name="search"
+            autocomplete="off"
+            placeholder="Titles, people, genres"
+            class="header__input"
+            type="text"
+            @keyup="goToSearch"
+          />
+        </form>
         <button class="header__search-btn">
           <i class="fas fa-search header__search-icon"></i>
         </button>
@@ -70,18 +85,33 @@
 
 <script>
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
+    const router = useRouter();
     const searchRef = ref("");
+    let search = ref("");
+    let movies = ref([]);
     let isScrolled = ref(false);
 
     function getFocus() {
       searchRef.value.focus();
     }
     function scroll() {
-      if (window.pageYOffset > 30) return (isScrolled.value = true);
-      else return (isScrolled.value = false);
+      window.pageYOffset > 30
+        ? (isScrolled.value = true)
+        : (isScrolled.value = false);
+    }
+    function goToSearch() {
+      if (search.value) {
+        router.replace({ path: "/search", query: { q: search.value } });
+      } else {
+        router.replace("/");
+      }
+    }
+    function scrollTop() {
+      window.scrollTo(0, 0);
     }
 
     onMounted(() => {
@@ -91,7 +121,11 @@ export default {
     return {
       searchRef,
       isScrolled,
+      search,
+      movies,
       getFocus,
+      goToSearch,
+      scrollTop,
     };
   },
 };
@@ -135,6 +169,9 @@ export default {
     padding-block: 20px;
     @include font-size(16);
     @include mq("mid-tablet", max) {
+      @include font-size(16);
+    }
+    @include mq("tablet", max) {
       @include font-size(12);
     }
   }
@@ -156,13 +193,17 @@ export default {
     @include mq("mid-tablet", max) {
       display: none;
       position: absolute;
-      top: 61px;
-      left: 0;
+      top: 70px;
+      left: 50px;
       flex-direction: column;
       width: 250px;
       padding-top: 20px;
       border-top: 1px solid $color-white;
       background: rgba(0, 0, 0, 0.9);
+    }
+    @include mq("tablet", max) {
+      top: 61px;
+      left: -20px;
     }
   }
   &__link {
@@ -182,13 +223,16 @@ export default {
       margin-right: 50px;
       @include mq("mid-tablet", max) {
         margin-top: 20px;
+      }
+      @include mq("tablet", max) {
+        margin-top: 20px;
         margin-right: 20px;
       }
     }
     &-icon {
       width: 100px;
       height: 27px;
-      @include mq("mid-tablet", max) {
+      @include mq("tablet", max) {
         width: 50px;
         height: 14px;
       }
@@ -274,6 +318,7 @@ export default {
     &-img {
       border-radius: 5px;
       padding-block: 20px;
+      @include mq("tablet");
     }
     &:hover {
       .header__account-links {

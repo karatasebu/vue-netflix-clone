@@ -13,7 +13,7 @@
       <div class="modal__overlay">
         <h3 class="modal__title">{{ cardInfo.name || cardInfo.title }}</h3>
         <div class="modal__btns">
-          <button class="modal__btn modal__btn--play">
+          <button @click="watchMovie" class="modal__btn modal__btn--play">
             <i class="fas fa-play modal__icon modal__icon--play"></i> Play
           </button>
           <button class="modal__btn">
@@ -54,7 +54,7 @@
             />
           </div>
           <div class="modal__card-info">
-            <p class="modal__card-vote">{{ item.vote_average }}</p>
+            <p class="modal__card-vote">{{ item.vote_average.toFixed(1) }}</p>
             <p class="modal__card-date">
               {{
                 item.release_date
@@ -94,18 +94,20 @@
 
 <script>
 import { computed } from "vue";
+import { useRouter } from "vue-router";
 
 export default {
-  props: ["cardInfo", "isOpened"],
+  props: ["cardInfo"],
   emits: ["closeModal"],
   setup(props) {
+    const router = useRouter();
     let related = computed(() => {
       return props.cardInfo.similar.results
         .filter(
           (el) =>
             el.backdrop_path !== null && el.overview.split(".")[0].length > 30
         )
-        .splice(0, 9);
+        .slice(0, 9);
     });
     let cast = computed(() => {
       if (props.cardInfo.credits.cast.length > 1) {
@@ -122,10 +124,19 @@ export default {
       }
     });
 
+    function watchMovie() {
+      router.push({
+        name: "video",
+        params: { id: props.cardInfo.external_ids.imdb_id },
+      });
+      window.scrollTo(0, 0);
+    }
+
     return {
       related,
       cast,
       genre,
+      watchMovie,
     };
   },
 };
@@ -166,6 +177,9 @@ export default {
     &--thin {
       font-weight: lighter;
     }
+    @include mq("tablet", max) {
+      @include font-size(22);
+    }
   }
   &__overlay {
     position: absolute;
@@ -191,13 +205,21 @@ export default {
     background-color: rgba(42, 42, 42, 0.6);
     cursor: pointer;
     border: 1px solid $color-white;
+    @include font-size(16);
+    @include mq("tablet", max) {
+      @include font-size(12);
+      width: 30px;
+      height: 30px;
+    }
     &--play {
-      @include font-size(16);
       font-weight: 600;
       background: $color-white;
       width: 120px;
       gap: 10px;
       border-radius: 5px;
+      @include mq("tablet", max) {
+        width: 80px;
+      }
     }
     &--close {
       position: absolute;
@@ -208,7 +230,6 @@ export default {
   }
   &__icon {
     color: $color-white;
-    @include font-size(16);
     &--play {
       color: $color-background;
       margin-left: 2px;
@@ -220,10 +241,13 @@ export default {
     flex-direction: row;
     align-items: flex-start;
     gap: 40px;
+    @include font-size(16);
+    @include mq("tablet", max) {
+      @include font-size(13);
+    }
   }
   &__overview {
     max-width: 60%;
-    @include font-size(16);
   }
   &__text {
     &--gray {
@@ -232,6 +256,10 @@ export default {
   }
   &__related {
     padding: 10px 5%;
+    @include font-size(16);
+    @include mq("tablet", max) {
+      @include font-size(14);
+    }
     &-title {
       margin-bottom: 10px;
     }
@@ -246,6 +274,13 @@ export default {
     margin-top: 10px;
     background: #2f2f2f;
     border-radius: 5px;
+    @include font-size(16);
+    @include mq("tablet", max) {
+      @include font-size(13);
+    }
+    @include mq("small", max) {
+      width: 49%;
+    }
     &-main {
       position: relative;
     }
@@ -273,7 +308,6 @@ export default {
       padding: 3px 8px;
     }
     &-overview {
-      @include font-size(14);
       padding: 10px 8px;
       margin: 0;
       color: #c8c8c8;
@@ -281,6 +315,9 @@ export default {
   }
   &__about {
     margin-top: 50px;
+    @include mq("tablet", max) {
+      @include font-size(13);
+    }
   }
 }
 </style>

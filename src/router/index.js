@@ -5,6 +5,8 @@ import ShowsComponent from "../views/shows/Shows.vue";
 import MoviesComponent from "../views/movies/Movies.vue";
 import PopularComponent from "../views/popular/Popular.vue";
 import MyListComponent from "../views/mylist/MyList.vue";
+import SearchComponent from "../views/search/Search.vue";
+import VideoComponent from "../views/video/Video.vue";
 
 const routes = [
   {
@@ -31,6 +33,17 @@ const routes = [
     path: "/my-list",
     name: "MyList",
     component: MyListComponent,
+  },
+  {
+    path: "/search",
+    name: "search",
+    component: SearchComponent,
+    props: (route) => ({ query: route.query.q }),
+  },
+  {
+    path: "/video/:id",
+    name: "video",
+    component: VideoComponent,
   },
 ];
 

@@ -34,11 +34,10 @@ export default {
 
     async function getHeroInfo() {
       await fetch(
-        `https://api.themoviedb.org/3/tv/77994?api_key=${env.apikey}&append_to_response=videos,credits,release_dates,similar`
+        `https://api.themoviedb.org/3/tv/77994?api_key=${env.apikey}&append_to_response=external_ids,videos,credits,release_dates,similar`
       )
         .then((response) => response.json())
         .then((response) => {
-          console.log(response);
           showsHeroInfo.value = response;
         });
     }

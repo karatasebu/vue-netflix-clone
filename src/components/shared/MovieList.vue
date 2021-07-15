@@ -36,7 +36,7 @@ export default {
 
     async function fetchMovies() {
       await fetch(
-        `https://api.themoviedb.org/3/discover/${props.movie.type}?api_key=${env.apikey}&with_genres=${props.movie.genreId}`
+        `https://api.themoviedb.org/3/discover/${props.movie.type}?api_key=${env.apikey}&include_adult=false&with_genres=${props.movie.genreId}`
       )
         .then((response) => response.json())
         .then((response) => {
@@ -55,7 +55,7 @@ export default {
 
     async function appendInfo(value) {
       await fetch(
-        `https://api.themoviedb.org/3/${props.movie.type}/${value}?api_key=${env.apikey}&append_to_response=videos,credits,release_dates,similar`
+        `https://api.themoviedb.org/3/${props.movie.type}/${value}?api_key=${env.apikey}&append_to_response=external_ids,videos,credits,release_dates,similar`
       )
         .then((response) => response.json())
         .then((response) => {
@@ -117,6 +117,10 @@ export default {
 
     max-width: calc(100% / 6);
     min-width: calc(100% / 6);
+    @include mq("desktop", max) {
+      max-width: calc(100% / 5);
+      min-width: calc(100% / 5);
+    }
     @include mq("mid-tablet", max) {
       max-width: calc(100% / 4);
       min-width: calc(100% / 4);
@@ -135,6 +139,12 @@ export default {
     padding-left: 5%;
     margin-top: 0;
     margin-bottom: -10px;
+    @include mq("tablet", max) {
+      @include font-size(14);
+    }
+    @include mq("tablet", max) {
+      @include font-size(12);
+    }
   }
   &__btn {
     position: absolute;
@@ -149,6 +159,9 @@ export default {
     &--left {
       left: 0;
       transform: rotate(180deg);
+    }
+    @include mq("mobile", max) {
+      height: calc(60% - 8px);
     }
   }
   &__icon {
