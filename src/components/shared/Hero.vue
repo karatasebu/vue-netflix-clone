@@ -5,7 +5,7 @@
       ref="videoRef"
       class="hero__video"
       :src="heroVideo"
-      type="video/webm"
+      type="video/mp4"
       autoplay
       :muted="isMuted"
     ></video>
@@ -56,11 +56,11 @@ export default {
         if (props.heroInfo.title) {
           return `./src/assets/hero-videos/${props.heroInfo.title
             .toLowerCase()
-            .replaceAll(" ", "")}.webm`;
+            .replaceAll(" ", "")}.mp4`;
         } else {
           return `./src/assets/hero-videos/${props.heroInfo.name
             .toLowerCase()
-            .replaceAll(" ", "")}.webm`;
+            .replaceAll(" ", "")}.mp4`;
         }
       }
     });
