@@ -1,38 +1,26 @@
 <template>
   <div class="hero">
-    <video
-      @ended="controlEnd"
-      ref="videoRef"
-      class="hero__video"
-      :src="heroVideo"
-      type="video/mp4"
-      autoplay
-      :muted="isMuted"
-    ></video>
+    <img
+      loading="lazy"
+      class="hero__img"
+      :src="`https://image.tmdb.org/t/p/original/${movieInfo.backdrop_path}`"
+      alt=""
+    />
     <div class="hero__main">
-      <div class="hero__action">
-        <h1 class="hero__title">{{ heroInfo.title || heroInfo.name }}</h1>
-        <p class="hero__overview">{{ heroInfo.overview }}</p>
-        <div class="hero__btns">
-          <button @click="watchMovie" class="hero__btn hero__btn--play">
-            <i class="fas fa-play hero__btn-icon"></i> Play
-          </button>
-          <button @click="openModal" class="hero__btn hero__btn--info">
-            <i class="fas fa-info-circle hero__btn-icon"></i> More Info
-          </button>
-        </div>
+      <h1 class="hero__title">{{ movieInfo.title || movieInfo.name }}</h1>
+      <p class="hero__overview">{{ movieOverview }}</p>
+      <div class="hero__btns">
+        <button @click="watchMovie" class="hero__btn hero__btn--play">
+          <i class="fas fa-play hero__btn-icon"></i> Play
+        </button>
+        <button @click="openModal" class="hero__btn hero__btn--info">
+          <i class="fas fa-info-circle hero__btn-icon"></i> More Info
+        </button>
       </div>
-      <button v-if="!isEnded" @click="muteVideo" class="hero__audio">
-        <i v-if="isMuted" class="fas fa-volume-mute hero__audio-icon"></i>
-        <i v-else class="fas fa-volume-up hero__audio-icon"></i>
-      </button>
-      <button @click="replayVideo" v-else class="hero__audio">
-        <i class="fas fa-reply hero__audio-icon"></i>
-      </button>
     </div>
     <ModalComponent
       @closeModal="closeModal"
-      :cardInfo="heroInfo"
+      :cardInfo="movieInfo"
       v-if="isActive"
     />
   </div>
@@ -41,76 +29,76 @@
 <script>
 import ModalComponent from "@/components/shared/Modal.vue";
 import { useRouter } from "vue-router";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
+import env from "@/env.js";
 
 export default {
-  props: ["heroInfo"],
+  props: ["heroParam"],
   components: { ModalComponent },
   setup(props) {
     const router = useRouter();
-    let isMuted = ref(true);
-    let heroVideo = computed(() => {
-      if (!props.heroInfo) {
-        return "";
-      } else {
-        if (props.heroInfo.title) {
-          return `./src/assets/hero-videos/${props.heroInfo.title
-            .toLowerCase()
-            .replaceAll(" ", "")}.mp4`;
-        } else {
-          return `./src/assets/hero-videos/${props.heroInfo.name
-            .toLowerCase()
-            .replaceAll(" ", "")}.mp4`;
-        }
-      }
-    });
     let isActive = ref(false);
-    let videoRef = ref("");
-    let isEnded = ref(false);
+    let movieInfo = ref("");
+    let randomMovie = ref("");
+    let movieOverview = computed(() => {
+      if (!randomMovie.value.overview) return "";
+      else return randomMovie.value.overview.split(".")[0] + ".";
+    });
 
     function openModal() {
       isActive.value = true;
-      videoRef.value.pause();
     }
     function closeModal() {
       isActive.value = false;
-      videoRef.value.play();
-    }
-
-    function muteVideo() {
-      isMuted.value ? (isMuted.value = false) : (isMuted.value = true);
-    }
-
-    function controlEnd() {
-      isEnded.value ? (isEnded.value = false) : (isEnded.value = true);
-    }
-
-    function replayVideo() {
-      videoRef.value.currentTime = 0;
-      videoRef.value.play();
-      isEnded.value = false;
     }
 
     function watchMovie() {
       router.push({
         name: "video",
-        params: { id: props.heroInfo.external_ids.imdb_id },
+        params: { id: movieInfo.value.external_ids.imdb_id },
       });
       window.scrollTo(0, 0);
     }
 
+    async function fetchMovies() {
+      await fetch(
+        `https://api.themoviedb.org/3/${props.heroParam}?api_key=${env.apikey}&include_adult=false`
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          randomMovie.value =
+            response.results[
+              Math.floor(Math.random() * response.results.length)
+            ];
+          appendInfo(randomMovie.value.id);
+        });
+    }
+
+    async function appendInfo(value) {
+      await fetch(
+        `https://api.themoviedb.org/3/${
+          props.heroParam.split("/")[0]
+        }/${value}?api_key=${
+          env.apikey
+        }&append_to_response=external_ids,videos,credits,release_dates,similar`
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          movieInfo.value = response;
+        });
+    }
+
+    onMounted(() => {
+      fetchMovies();
+    });
+
     return {
-      props,
-      heroVideo,
-      muteVideo,
-      isMuted,
       isActive,
+      randomMovie,
+      movieInfo,
+      movieOverview,
       openModal,
       closeModal,
-      videoRef,
-      controlEnd,
-      isEnded,
-      replayVideo,
       watchMovie,
     };
   },
@@ -120,6 +108,8 @@ export default {
 <style lang="scss">
 .hero {
   position: relative;
+  display: flex;
+  flex-direction: column;
   &::before {
     content: "";
     position: absolute;
@@ -136,15 +126,15 @@ export default {
   }
   &__main {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: flex-start;
     width: 90%;
     position: absolute;
     bottom: 35%;
     margin-left: 5%;
   }
-  &__video {
+  &__img {
     width: 100%;
   }
   &__btns {
@@ -196,31 +186,6 @@ export default {
     @include font-size(18);
     @include mq("mid-tablet", max) {
       display: none;
-    }
-  }
-  &__audio {
-    border: 1px solid $color-white;
-    background: transparent;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    @include font-size(18);
-    @include mq("tablet", max) {
-      @include font-size(14);
-      width: 35px;
-      height: 35px;
-    }
-    @include mq("small", max) {
-      @include font-size(10);
-      width: 25px;
-      height: 25px;
-    }
-    &-icon {
-      color: $color-white;
     }
   }
 }

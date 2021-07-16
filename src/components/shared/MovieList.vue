@@ -160,7 +160,7 @@ export default {
       left: 0;
       transform: rotate(180deg);
     }
-    @include mq("mobile", max) {
+    @include mq("tablet", max) {
       height: calc(60% - 8px);
     }
   }

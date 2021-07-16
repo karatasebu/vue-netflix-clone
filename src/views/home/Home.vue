@@ -1,5 +1,5 @@
 <template>
-  <HeroComponent :heroInfo="homeHeroInfo" />
+  <HeroComponent :heroParam="moviesHeroParam" />
   <main class="main">
     <MovieListComponent
       :movie="item"
@@ -10,9 +10,6 @@
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
-import env from "@/env.js";
-
 import HeroComponent from "@/components/shared/Hero.vue";
 import MovieListComponent from "@/components/shared/MovieList.vue";
 
@@ -30,30 +27,14 @@ export default {
       { type: "movie", title: "Crime & Thrillers", genreId: 80 },
       { type: "tv", title: "Top Rated", genreId: 35 },
     ];
-    let homeHeroInfo = ref("");
+    let moviesHeroParam = "movie/popular";
 
-    async function getHeroInfo() {
-      await fetch(
-        `https://api.themoviedb.org/3/tv/19885?api_key=${env.apikey}&append_to_response=external_ids,videos,credits,release_dates,similar`
-      )
-        .then((response) => response.json())
-        .then((response) => {
-          homeHeroInfo.value = response;
-        });
-    }
-    onMounted(() => {
-      getHeroInfo();
-    });
     return {
       listInfo,
-      homeHeroInfo,
+      moviesHeroParam,
     };
   },
 };
 </script>
 
-<style lang="scss" scoped>
-.main {
-  margin-top: -13%;
-}
-</style>
+<style></style>
