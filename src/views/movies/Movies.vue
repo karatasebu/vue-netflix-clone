@@ -27,7 +27,7 @@ export default {
       { type: "movie", title: "Crime & Thrillers", genreId: 80 },
       { type: "tv", title: "Top Rated", genreId: 35 },
     ];
-    let moviesHeroParam = "tv/top_rated";
+    let moviesHeroParam = "movie/popular";
 
     return {
       listInfo,

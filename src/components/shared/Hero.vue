@@ -38,6 +38,7 @@ export default {
   setup(props) {
     const router = useRouter();
     let isActive = ref(false);
+    let movies = ref([]);
     let movieInfo = ref("");
     let randomMovie = ref("");
     let movieOverview = computed(() => {
@@ -66,10 +67,11 @@ export default {
       )
         .then((response) => response.json())
         .then((response) => {
+          movies.value = response.results.filter(
+            (el) => el.backdrop_path !== null
+          );
           randomMovie.value =
-            response.results[
-              Math.floor(Math.random() * response.results.length)
-            ];
+            movies.value[Math.floor(Math.random() * movies.value.length)];
           appendInfo(randomMovie.value.id);
         });
     }

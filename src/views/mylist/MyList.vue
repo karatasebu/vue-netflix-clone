@@ -1,37 +1,74 @@
 <template>
-  <div class="list">Sa</div>
-  <div :key="index" v-for="(item, index) in myList">
-    <MovieCardComponent @addTolist="addMovie" :cardInfo="item" />
+  <div class="movies">
+    <div class="movies__content">
+      <div class="movies__card" :key="index" v-for="(item, index) in myList">
+        <MovieCardComponent @removeFromList="removeMovie" :cardInfo="item" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import { onMounted, ref } from "vue";
 import MovieCardComponent from "@/components/shared/MovieCard.vue";
-
-import { ref } from "vue";
 
 export default {
   components: { MovieCardComponent },
   setup() {
     let myList = ref([]);
 
-    function addMovie(cardInfo) {
-      myList.value.push(cardInfo);
-      console.log(myList.value);
+    function getMovies() {
+      for (let i = 0; i < localStorage.length; i++) {
+        myList.value[i] = JSON.parse(localStorage.getItem(localStorage.key(i)));
+      }
     }
 
+    function removeMovie(cardInfo) {
+      localStorage.removeItem(cardInfo.id);
+      for (var i = 0; i < myList.value.length; i++) {
+        if (myList.value[i].id === cardInfo.id) {
+          myList.value.splice(i, 1);
+        }
+      }
+    }
+
+    onMounted(() => {
+      getMovies();
+    });
+
     return {
-      addMovie,
       myList,
+      removeMovie,
     };
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.list {
-  color: $color-white;
-  padding-top: 100px;
-  min-height: 150vh;
+.movies {
+  min-height: 100vh;
+  padding: 80px 5% 0 5%;
+  &__content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  &__card {
+    padding-right: 4px;
+    width: calc(100% / 6);
+    @include mq("desktop", max) {
+      width: calc(100% / 5);
+    }
+    @include mq("mid-tablet", max) {
+      width: calc(100% / 4);
+    }
+    @include mq("tablet", max) {
+      width: calc(100% / 3);
+    }
+    @include mq("mobile", max) {
+      width: calc(100% / 2);
+    }
+  }
 }
 </style>

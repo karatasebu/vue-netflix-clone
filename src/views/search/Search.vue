@@ -48,6 +48,11 @@ export default {
       )
         .then((response) => response.json())
         .then((response) => {
+          if (localStorage.getItem(response.id) === null) {
+            response.isAdded = false;
+          } else {
+            response.isAdded = true;
+          }
           if (
             response.videos.results.length > 0 &&
             response.similar.results.length > 0
@@ -89,10 +94,5 @@ export default {
       width: calc(100% / 2);
     }
   }
-}
-h1 {
-  color: #fff;
-  margin: 0;
-  padding-top: 100px;
 }
 </style>

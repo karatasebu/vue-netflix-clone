@@ -59,6 +59,11 @@ export default {
       )
         .then((response) => response.json())
         .then((response) => {
+          if (localStorage.getItem(response.id) === null) {
+            response.isAdded = false;
+          } else {
+            response.isAdded = true;
+          }
           if (
             response.videos.results.length > 0 &&
             response.similar.results.length > 0
