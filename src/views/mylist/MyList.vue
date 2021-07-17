@@ -33,9 +33,7 @@ export default {
 
     function removeMovie(cardInfo) {
       cardInfo.isAdded = false;
-      if (!cardInfo.isLiked) {
-        localStorage.removeItem(cardInfo.id);
-      }
+      localStorage.setItem(cardInfo.id, JSON.stringify(cardInfo));
       for (var i = 0; i < myList.value.length; i++) {
         if (myList.value[i].id === cardInfo.id) {
           myList.value.splice(i, 1);
