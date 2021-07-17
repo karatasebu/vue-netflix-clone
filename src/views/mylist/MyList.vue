@@ -32,9 +32,8 @@ export default {
     }
 
     function removeMovie(cardInfo) {
-      if (
-        JSON.parse(localStorage.getItem(localStorage.key(i))).isAdded === null
-      ) {
+      cardInfo.isAdded = false;
+      if (!cardInfo.isLiked) {
         localStorage.removeItem(cardInfo.id);
       }
       for (var i = 0; i < myList.value.length; i++) {
