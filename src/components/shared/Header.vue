@@ -217,18 +217,18 @@ export default {
   }
   &__links {
     @include mq("mid-tablet", max) {
-      display: flex;
-      position: absolute;
-      top: 70px;
-      left: 50px;
-      display: flex;
-      flex-direction: column;
-      width: 250px;
-      padding-top: 20px;
-      border-top: 1px solid $color-white;
-      background: rgba(0, 0, 0, 0.9);
+      display: none;
       &.show {
-        display: none;
+        display: flex;
+        position: absolute;
+        top: 70px;
+        left: 50px;
+        display: flex;
+        flex-direction: column;
+        width: 250px;
+        padding-top: 20px;
+        border-top: 1px solid $color-white;
+        background: rgba(0, 0, 0, 0.9);
       }
     }
     @include mq("tablet", max) {
