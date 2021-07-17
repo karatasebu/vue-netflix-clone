@@ -19,6 +19,8 @@
       </div>
     </div>
     <ModalComponent
+      @addToList="addToList"
+      @removeMovie="removeMovie"
       @closeModal="closeModal"
       :cardInfo="movieInfo"
       v-if="isActive"
@@ -59,6 +61,16 @@ export default {
         params: { id: movieInfo.value.external_ids.imdb_id },
       });
       window.scrollTo(0, 0);
+    }
+
+    function addToList() {
+      movieInfo.value.isAdded = true;
+      localStorage.setItem(movieInfo.value.id, JSON.stringify(movieInfo.value));
+    }
+
+    function removeMovie() {
+      movieInfo.value.isAdded = false;
+      localStorage.removeItem(movieInfo.value.id);
     }
 
     async function fetchMovies() {
@@ -102,6 +114,8 @@ export default {
       openModal,
       closeModal,
       watchMovie,
+      addToList,
+      removeMovie,
     };
   },
 };

@@ -20,15 +20,21 @@
           </button>
           <button
             v-else
-            @click="$emit('removeFromList', cardInfo), remove()"
+            @click="$emit('removeFromList', cardInfo), removeMovie()"
             class="card__btn"
           >
             <i class="fas fa-check card__icon"></i>
           </button>
-          <button class="card__btn">
+          <button
+            @click="likeMovie"
+            :class="[{ act: cardInfo.isLiked }, 'card__btn']"
+          >
             <i class="far fa-thumbs-up card__icon"></i>
           </button>
-          <button class="card__btn">
+          <button
+            @click="dislikeMovie"
+            :class="[{ act: cardInfo.isLiked === false }, 'card__btn']"
+          >
             <i class="far fa-thumbs-down card__icon"></i>
           </button>
         </div>
@@ -46,7 +52,11 @@
     </div>
   </div>
   <ModalComponent
+    @addToList="addToList"
+    @removeMovie="removeMovie"
     @closeModal="closeModal"
+    @watchMovie="watchMovie"
+    v-bind="$attrs"
     :cardInfo="cardInfo"
     v-if="isActive"
   />
@@ -84,11 +94,26 @@ export default {
     function addToList() {
       props.cardInfo.isAdded = true;
       localStorage.setItem(props.cardInfo.id, JSON.stringify(props.cardInfo));
+      console.log(props.cardInfo);
     }
 
-    function remove() {
+    function removeMovie() {
       props.cardInfo.isAdded = false;
-      localStorage.removeItem(props.cardInfo.id);
+      if (
+        JSON.parse(localStorage.getItem(props.cardInfo.id)).isAdded === null
+      ) {
+        localStorage.removeItem(props.cardInfo.id);
+      }
+    }
+
+    function likeMovie() {
+      props.cardInfo.isLiked = true;
+      localStorage.setItem(props.cardInfo.id, JSON.stringify(props.cardInfo));
+    }
+
+    function dislikeMovie() {
+      props.cardInfo.isLiked = false;
+      localStorage.setItem(props.cardInfo.id, JSON.stringify(props.cardInfo));
     }
 
     return {
@@ -97,7 +122,9 @@ export default {
       closeModal,
       watchMovie,
       addToList,
-      remove,
+      removeMovie,
+      likeMovie,
+      dislikeMovie,
     };
   },
 };
@@ -157,10 +184,15 @@ export default {
     width: 25px;
     height: 25px;
     border-radius: 50%;
+    color: $color-white;
     background: transparent;
     cursor: pointer;
     @include font-size(10);
     border: 1px solid $color-white;
+    &.act {
+      @include font-size(11);
+      border-width: 2px;
+    }
     &--play {
       background: $color-white;
     }
@@ -178,7 +210,6 @@ export default {
     }
   }
   &__icon {
-    color: $color-white;
     &--play {
       color: $color-background;
       margin-left: 2px;

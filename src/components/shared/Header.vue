@@ -80,10 +80,23 @@
           class="fas fa-bell header__notification-icon"
         ></i>
         <div ref="notificationRef" class="header__notification-list">
-          <ul>
-            <li>Now available Part 2</li>
-            <li>Now available Part 2</li>
-          </ul>
+          <a class="header__notification-item" href="#"
+            ><img
+              class="header__notification-img"
+              src="@/assets/notification-images/lupin.jpg"
+              alt="lupin-poster"
+            />
+            <p>Now available Part 2.</p>
+          </a>
+          <hr class="header__notification-line" />
+          <a class="header__notification-item" href="#"
+            ><img
+              class="header__notification-img"
+              src="@/assets/notification-images/strangerthings.jpg"
+              alt="stranger things-poster"
+            />
+            <p>Suggestion for tonight.</p></a
+          >
         </div>
       </div>
       <div @click="showMenu(accountRef)" class="header__account">
@@ -334,12 +347,25 @@ export default {
       top: 60px;
       right: 0;
       padding: 15px 10px;
-      width: 170px;
+      width: 250px;
       border-top: 1px solid $color-white;
       background: rgba(0, 0, 0, 0.9);
       &.show {
         display: block;
       }
+    }
+    &-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: $color-white;
+      text-decoration: none;
+      gap: 10px;
+    }
+    &-img {
+      width: 90px;
+      height: 55px;
+      border-radius: 5px;
     }
   }
   // Account Button

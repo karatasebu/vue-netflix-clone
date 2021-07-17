@@ -1,7 +1,9 @@
 <template>
   <div class="movies">
-    <div class="movies__card" :key="index" v-for="(item, index) in movies">
-      <MovieCardComponent :cardInfo="item" />
+    <div class="movies__content">
+      <div class="movies__card" :key="index" v-for="(item, index) in movies">
+        <MovieCardComponent :cardInfo="item" />
+      </div>
     </div>
   </div>
 </template>
@@ -74,10 +76,13 @@ export default {
 
 <style lang="scss" scoped>
 .movies {
+  min-height: 100vh;
   padding: 80px 5% 0 5%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
+  &__content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
   &__card {
     padding-right: 4px;
     width: calc(100% / 6);

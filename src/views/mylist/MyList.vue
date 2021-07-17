@@ -2,7 +2,11 @@
   <div class="movies">
     <div class="movies__content">
       <div class="movies__card" :key="index" v-for="(item, index) in myList">
-        <MovieCardComponent @removeFromList="removeMovie" :cardInfo="item" />
+        <MovieCardComponent
+          @removeFromArr="removeMovie"
+          @removeFromList="removeMovie"
+          :cardInfo="item"
+        />
       </div>
     </div>
   </div>
@@ -19,12 +23,20 @@ export default {
 
     function getMovies() {
       for (let i = 0; i < localStorage.length; i++) {
-        myList.value[i] = JSON.parse(localStorage.getItem(localStorage.key(i)));
+        if (JSON.parse(localStorage.getItem(localStorage.key(i))).isAdded) {
+          myList.value.push(
+            JSON.parse(localStorage.getItem(localStorage.key(i)))
+          );
+        }
       }
     }
 
     function removeMovie(cardInfo) {
-      localStorage.removeItem(cardInfo.id);
+      if (
+        JSON.parse(localStorage.getItem(localStorage.key(i))).isAdded === null
+      ) {
+        localStorage.removeItem(cardInfo.id);
+      }
       for (var i = 0; i < myList.value.length; i++) {
         if (myList.value[i].id === cardInfo.id) {
           myList.value.splice(i, 1);
