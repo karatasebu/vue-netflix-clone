@@ -229,11 +229,11 @@ export default {
         padding-top: 20px;
         border-top: 1px solid $color-white;
         background: rgba(0, 0, 0, 0.9);
+        @include mq("tablet", max) {
+          top: 60px;
+          left: -35px;
+        }
       }
-    }
-    @include mq("tablet", max) {
-      top: 60px;
-      left: -35px;
     }
   }
   &__link {
