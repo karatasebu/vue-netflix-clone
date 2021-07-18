@@ -17,37 +17,37 @@
         </svg>
       </router-link>
       <div class="header__navbar">
-        <div @click="showMenu(navRef)" class="header__menu">
+        <div @click="toggleMenu(navRef)" class="header__menu">
           <span class="header__browse">Browse</span>
           <div class="header__account-arrow"></div>
         </div>
         <div ref="navRef" class="header__links">
           <router-link
-            @click="scrollTop(), showMenu(navRef)"
+            @click="scrollTop(), toggleMenu(navRef)"
             class="header__link"
             to="/"
             >Home</router-link
           >
           <router-link
-            @click="scrollTop(), showMenu(navRef)"
+            @click="scrollTop(), toggleMenu(navRef)"
             class="header__link"
             to="/shows"
             >TV Shows</router-link
           >
           <router-link
-            @click="scrollTop(), showMenu(navRef)"
+            @click="scrollTop(), toggleMenu(navRef)"
             class="header__link"
             to="/movies"
             >Movies</router-link
           >
           <router-link
-            @click="scrollTop(), showMenu(navRef)"
+            @click="scrollTop(), toggleMenu(navRef)"
             class="header__link"
             to="/popular"
             >New & Popular</router-link
           >
           <router-link
-            @click="scrollTop(), showMenu(navRef)"
+            @click="scrollTop(), toggleMenu(navRef)"
             class="header__link"
             to="/my-list"
             >My List</router-link
@@ -76,7 +76,7 @@
       </div>
       <div class="header__notification">
         <i
-          @click="showMenu(notificationRef)"
+          @click="toggleMenu(notificationRef)"
           class="fas fa-bell header__notification-icon"
         ></i>
         <div ref="notificationRef" class="header__notification-list">
@@ -99,7 +99,7 @@
           >
         </div>
       </div>
-      <div @click="showMenu(accountRef)" class="header__account">
+      <div @click="toggleMenu(accountRef)" class="header__account">
         <div class="header__account-menu">
           <img
             class="header__account-img"
@@ -154,7 +154,7 @@ export default {
       window.scrollTo(0, 0);
     }
 
-    function showMenu(element) {
+    function toggleMenu(element) {
       element.classList.toggle("show");
     }
 
@@ -173,7 +173,7 @@ export default {
       getFocus,
       goToSearch,
       scrollTop,
-      showMenu,
+      toggleMenu,
     };
   },
 };
@@ -366,6 +366,10 @@ export default {
       width: 90px;
       height: 55px;
       border-radius: 5px;
+    }
+    &-line {
+      border: none;
+      border-top: 1px solid $header-link;
     }
   }
   // Account Button

@@ -233,6 +233,9 @@ export default {
     &.act {
       @include font-size(17);
       border-width: 2px;
+      @include mq("tablet", max) {
+        @include font-size(13);
+      }
     }
     @include mq("tablet", max) {
       @include font-size(12);

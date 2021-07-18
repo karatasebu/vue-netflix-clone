@@ -68,7 +68,9 @@ export default {
             }
             if (JSON.parse(localStorage.getItem(response.id)).isLiked) {
               response.isLiked = true;
-            } else {
+            } else if (
+              JSON.parse(localStorage.getItem(response.id)).isLiked === false
+            ) {
               response.isLiked = false;
             }
           }

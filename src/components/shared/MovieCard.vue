@@ -108,12 +108,16 @@ export default {
     }
 
     function likeMovie() {
-      props.cardInfo.isLiked = true;
+      props.cardInfo.isLiked
+        ? (props.cardInfo.isLiked = null)
+        : (props.cardInfo.isLiked = true);
       localStorage.setItem(props.cardInfo.id, JSON.stringify(props.cardInfo));
     }
 
     function dislikeMovie() {
-      props.cardInfo.isLiked = false;
+      props.cardInfo.isLiked === false
+        ? (props.cardInfo.isLiked = null)
+        : (props.cardInfo.isLiked = false);
       localStorage.setItem(props.cardInfo.id, JSON.stringify(props.cardInfo));
     }
 
@@ -193,6 +197,12 @@ export default {
     &.act {
       @include font-size(11);
       border-width: 2px;
+      @include mq("desktop", max) {
+        @include font-size(9);
+      }
+      @include mq("small", max) {
+        @include font-size(6);
+      }
     }
     &--play {
       background: $color-white;
