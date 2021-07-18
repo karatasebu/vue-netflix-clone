@@ -13,18 +13,18 @@ import MovieCardComponent from "@/components/shared/MovieCard.vue";
 
 import { watchEffect, ref } from "vue";
 import { useRoute } from "vue-router";
-import env from "@/env.js";
 
 export default {
   components: { MovieCardComponent },
   setup() {
-    let route = useRoute();
+    const apikey = import.meta.env.VITE_KEY;
+    const route = useRoute();
     let moviesId = ref([]);
     let movies = ref([]);
 
     async function fetchMovies() {
       await fetch(
-        `https://api.themoviedb.org/3/search/movie?api_key=${env.apikey}&include_adult=false&query=${route.query.q}`
+        `https://api.themoviedb.org/3/search/movie?api_key=${apikey}&include_adult=false&query=${route.query.q}`
       )
         .then((response) => response.json())
         .then((response) => {
@@ -46,7 +46,7 @@ export default {
 
     async function appendInfo(value) {
       await fetch(
-        `https://api.themoviedb.org/3/movie/${value}?api_key=${env.apikey}&append_to_response=external_ids,videos,credits,release_dates,similar`
+        `https://api.themoviedb.org/3/movie/${value}?api_key=${apikey}&append_to_response=external_ids,videos,credits,release_dates,similar`
       )
         .then((response) => response.json())
         .then((response) => {

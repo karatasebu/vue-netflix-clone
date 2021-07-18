@@ -34,12 +34,12 @@
 import ModalComponent from "@/components/shared/Modal.vue";
 import { useRouter } from "vue-router";
 import { computed, onMounted, ref } from "vue";
-import env from "@/env.js";
 
 export default {
   props: ["heroParam"],
   components: { ModalComponent },
   setup(props) {
+    const apikey = import.meta.env.VITE_KEY;
     const router = useRouter();
     let isActive = ref(false);
     let movies = ref([]);
@@ -91,7 +91,7 @@ export default {
 
     async function fetchMovies() {
       await fetch(
-        `https://api.themoviedb.org/3/${props.heroParam}?api_key=${env.apikey}&include_adult=false`
+        `https://api.themoviedb.org/3/${props.heroParam}?api_key=${apikey}&include_adult=false`
       )
         .then((response) => response.json())
         .then((response) => {
@@ -108,9 +108,7 @@ export default {
       await fetch(
         `https://api.themoviedb.org/3/${
           props.heroParam.split("/")[0]
-        }/${value}?api_key=${
-          env.apikey
-        }&append_to_response=external_ids,videos,credits,release_dates,similar`
+        }/${value}?api_key=${apikey}&append_to_response=external_ids,videos,credits,release_dates,similar`
       )
         .then((response) => response.json())
         .then((response) => {

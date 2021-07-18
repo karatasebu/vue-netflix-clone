@@ -21,14 +21,13 @@
 
 <script>
 import MovieCardComponent from "@/components/shared/MovieCard.vue";
-
 import { onMounted, ref } from "vue";
-import env from "@/env.js";
 
 export default {
   props: ["movie"],
   components: { MovieCardComponent },
   setup(props) {
+    const apikey = import.meta.env.VITE_KEY;
     let moviesId = ref([]);
     let movies = ref([]);
     let slider = ref("");
@@ -36,7 +35,7 @@ export default {
 
     async function fetchMovies() {
       await fetch(
-        `https://api.themoviedb.org/3/discover/${props.movie.type}?api_key=${env.apikey}&include_adult=false&with_genres=${props.movie.genreId}`
+        `https://api.themoviedb.org/3/discover/${props.movie.type}?api_key=${apikey}&include_adult=false&with_genres=${props.movie.genreId}`
       )
         .then((response) => response.json())
         .then((response) => {
@@ -55,7 +54,7 @@ export default {
 
     async function appendInfo(value) {
       await fetch(
-        `https://api.themoviedb.org/3/${props.movie.type}/${value}?api_key=${env.apikey}&append_to_response=external_ids,videos,credits,release_dates,similar`
+        `https://api.themoviedb.org/3/${props.movie.type}/${value}?api_key=${apikey}&append_to_response=external_ids,videos,credits,release_dates,similar`
       )
         .then((response) => response.json())
         .then((response) => {

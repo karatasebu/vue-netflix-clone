@@ -12,10 +12,10 @@
 <script>
 import { reactive, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
-import env from "@/env.js";
 
 export default {
   setup() {
+    const apikey = import.meta.env.VITE_KEY;
     const route = useRoute();
     let videoInfo = reactive({
       type: "",
@@ -25,7 +25,7 @@ export default {
 
     async function fetchVideoInfo() {
       await fetch(
-        `https://api.themoviedb.org/3/find/${route.params.id}?api_key=${env.apikey}&language=en-US&external_source=imdb_id`
+        `https://api.themoviedb.org/3/find/${route.params.id}?api_key=${apikey}&language=en-US&external_source=imdb_id`
       )
         .then((response) => response.json())
         .then((response) => {
@@ -42,7 +42,7 @@ export default {
     }
     async function fetchVideoUrl() {
       await fetch(
-        `https://api.themoviedb.org/3/${videoInfo.type}/${videoInfo.id}?api_key=${env.apikey}&append_to_response=videos`
+        `https://api.themoviedb.org/3/${videoInfo.type}/${videoInfo.id}?api_key=${apikey}&append_to_response=videos`
       )
         .then((response) => response.json())
         .then((response) => {
