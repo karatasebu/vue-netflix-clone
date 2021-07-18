@@ -52,6 +52,8 @@
     </div>
   </div>
   <ModalComponent
+    @likeMovie="likeMovie"
+    @dislikeMovie="dislikeMovie"
     @addToList="addToList"
     @removeMovie="removeMovie"
     @closeModal="closeModal"

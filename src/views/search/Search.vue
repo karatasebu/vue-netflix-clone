@@ -52,8 +52,16 @@ export default {
         .then((response) => {
           if (localStorage.getItem(response.id) === null) {
             response.isAdded = false;
+            response.isLiked = null;
           } else {
-            response.isAdded = true;
+            if (JSON.parse(localStorage.getItem(response.id)).isAdded) {
+              response.isAdded = true;
+            }
+            if (JSON.parse(localStorage.getItem(response.id)).isLiked) {
+              response.isLiked = true;
+            } else {
+              response.isLiked = false;
+            }
           }
           if (
             response.videos.results.length > 0 &&

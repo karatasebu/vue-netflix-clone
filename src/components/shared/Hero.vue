@@ -19,6 +19,8 @@
       </div>
     </div>
     <ModalComponent
+      @likeMovie="likeMovie"
+      @dislikeMovie="dislikeMovie"
       @addToList="addToList"
       @removeMovie="removeMovie"
       @closeModal="closeModal"
@@ -73,6 +75,16 @@ export default {
       localStorage.removeItem(movieInfo.value.id);
     }
 
+    function likeMovie() {
+      movieInfo.value.isLiked = true;
+      localStorage.setItem(movieInfo.value.id, JSON.stringify(movieInfo.value));
+    }
+
+    function dislikeMovie() {
+      movieInfo.value.isLiked = false;
+      localStorage.setItem(movieInfo.value.id, JSON.stringify(movieInfo.value));
+    }
+
     async function fetchMovies() {
       await fetch(
         `https://api.themoviedb.org/3/${props.heroParam}?api_key=${env.apikey}&include_adult=false`
@@ -116,6 +128,8 @@ export default {
       watchMovie,
       addToList,
       removeMovie,
+      likeMovie,
+      dislikeMovie,
     };
   },
 };
