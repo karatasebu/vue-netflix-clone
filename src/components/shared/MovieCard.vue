@@ -99,10 +99,10 @@ export default {
 
     function removeMovie() {
       props.cardInfo.isAdded = false;
-      if (!props.cardInfo.isLiked) {
+      localStorage.setItem(props.cardInfo.id, JSON.stringify(props.cardInfo));
+      if (props.cardInfo.isLiked === null) {
         localStorage.removeItem(props.cardInfo.id);
       }
-      console.log(props.cardInfo.isLiked);
     }
 
     function likeMovie() {
