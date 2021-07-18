@@ -1,6 +1,6 @@
 # Netflix Clone
 
-Netflix Clone made with Vue.js and SCSS. Datas fetched from TMDB API.
+Netflix Clone made with Vue.js and SCSS. Data fetched from TMDB API.
 
 ## [Demo website](https://vue-netflix-clone-one.vercel.app/)
 
