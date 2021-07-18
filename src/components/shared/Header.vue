@@ -22,34 +22,19 @@
           <div class="header__account-arrow"></div>
         </div>
         <div ref="navRef" class="header__links">
-          <router-link
-            @click="scrollTop(), toggleMenu(navRef)"
-            class="header__link"
-            to="/"
+          <router-link @click="scrollTop" class="header__link" to="/"
             >Home</router-link
           >
-          <router-link
-            @click="scrollTop(), toggleMenu(navRef)"
-            class="header__link"
-            to="/shows"
+          <router-link @click="scrollTop" class="header__link" to="/shows"
             >TV Shows</router-link
           >
-          <router-link
-            @click="scrollTop(), toggleMenu(navRef)"
-            class="header__link"
-            to="/movies"
+          <router-link @click="scrollTop" class="header__link" to="/movies"
             >Movies</router-link
           >
-          <router-link
-            @click="scrollTop(), toggleMenu(navRef)"
-            class="header__link"
-            to="/popular"
+          <router-link @click="scrollTop" class="header__link" to="/popular"
             >New & Popular</router-link
           >
-          <router-link
-            @click="scrollTop(), toggleMenu(navRef)"
-            class="header__link"
-            to="/my-list"
+          <router-link @click="scrollTop" class="header__link" to="/my-list"
             >My List</router-link
           >
         </div>
@@ -121,7 +106,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 
 export default {
@@ -152,6 +137,9 @@ export default {
     }
     function scrollTop() {
       window.scrollTo(0, 0);
+      if (navRef.value.classList.contains("show")) {
+        navRef.value.classList.remove("show");
+      }
     }
 
     function toggleMenu(element) {
@@ -245,6 +233,10 @@ export default {
         @include mq("tablet", max) {
           top: 60px;
           left: -35px;
+        }
+        @include mq("mobile", max) {
+          width: 200px;
+          left: -10px;
         }
       }
     }
