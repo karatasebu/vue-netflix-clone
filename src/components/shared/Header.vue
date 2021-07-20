@@ -234,7 +234,7 @@ export default {
           top: 60px;
           left: -35px;
         }
-        @include mq("mobile", max) {
+        @include mq("small", max) {
           width: 200px;
           left: -10px;
         }
