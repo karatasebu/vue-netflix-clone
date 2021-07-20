@@ -149,12 +149,11 @@ export default {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 15%;
+    height: 100%;
     background: linear-gradient(
       180deg,
       rgba(247, 247, 247, 0) 10%,
-      rgba(0, 0, 0, 0.1) 20%,
-      $color-background 50%
+      rgba(20, 20, 20, 1) 90%
     );
   }
   &__main {

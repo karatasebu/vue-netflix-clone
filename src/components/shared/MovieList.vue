@@ -2,7 +2,7 @@
   <div class="carousel">
     <h3 class="carousel__title">{{ movie.title }}</h3>
     <button
-      v-if="isActive"
+      v-if="leftArrow"
       @click="prevSlide"
       class="carousel__btn carousel__btn--left"
     >
@@ -13,7 +13,7 @@
         <MovieCardComponent :cardInfo="item" />
       </div>
     </div>
-    <button @click="nextSlide" class="carousel__btn">
+    <button v-if="rightArrow" @click="nextSlide" class="carousel__btn">
       <i class="fas fa-chevron-right carousel__icon"></i>
     </button>
   </div>
@@ -31,7 +31,8 @@ export default {
     let moviesId = ref([]);
     let movies = ref([]);
     let slider = ref("");
-    let isActive = ref(false);
+    let leftArrow = ref(false);
+    let rightArrow = ref(true);
 
     async function fetchMovies() {
       await fetch(
@@ -58,20 +59,13 @@ export default {
       )
         .then((response) => response.json())
         .then((response) => {
-          if (localStorage.getItem(response.id) === null) {
+          let item = localStorage.getItem(response.id);
+          if (!item) {
             response.isAdded = false;
             response.isLiked = null;
           } else {
-            if (JSON.parse(localStorage.getItem(response.id)).isAdded) {
-              response.isAdded = true;
-            }
-            if (JSON.parse(localStorage.getItem(response.id)).isLiked) {
-              response.isLiked = true;
-            } else if (
-              JSON.parse(localStorage.getItem(response.id)).isLiked === false
-            ) {
-              response.isLiked = false;
-            }
+            response.isAdded = JSON.parse(item).isAdded;
+            response.isLiked = JSON.parse(item).isLiked;
           }
           if (
             response.videos.results.length > 0 &&
@@ -84,12 +78,19 @@ export default {
 
     function nextSlide() {
       slider.value.scrollLeft += (slider.value.clientWidth * 90) / 100;
-      isActive.value = true;
+      leftArrow.value = true;
+      if (
+        slider.value.clientWidth + slider.value.scrollLeft * 2 >
+        Math.round(slider.value.scrollWidth / 10) * 10
+      ) {
+        rightArrow.value = false;
+      }
     }
     function prevSlide() {
       slider.value.scrollLeft -= (slider.value.clientWidth * 90) / 100;
+      rightArrow.value = true;
       if (slider.value.scrollLeft < slider.value.clientWidth) {
-        isActive.value = false;
+        leftArrow.value = false;
       }
     }
 
@@ -101,7 +102,8 @@ export default {
       moviesId,
       movies,
       slider,
-      isActive,
+      leftArrow,
+      rightArrow,
       nextSlide,
       prevSlide,
     };
@@ -118,17 +120,18 @@ export default {
       transition: color 0.5s ease;
     }
   }
-
   &__list {
     display: flex;
     flex-direction: row;
-    overflow: hidden;
+    overflow: scroll;
     scroll-behavior: smooth;
     padding: 0 5%;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
   &__item {
     padding-right: 4px;
-
     max-width: calc(100% / 6);
     min-width: calc(100% / 6);
     @include mq("desktop", max) {
@@ -153,7 +156,7 @@ export default {
     padding-left: 5%;
     margin-top: 0;
     margin-bottom: -10px;
-    @include mq("tablet", max) {
+    @include mq("mid-tablet", max) {
       @include font-size(14);
     }
     @include mq("tablet", max) {

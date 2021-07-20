@@ -50,20 +50,13 @@ export default {
       )
         .then((response) => response.json())
         .then((response) => {
-          if (localStorage.getItem(response.id) === null) {
+          let item = localStorage.getItem(response.id);
+          if (!item) {
             response.isAdded = false;
             response.isLiked = null;
           } else {
-            if (JSON.parse(localStorage.getItem(response.id)).isAdded) {
-              response.isAdded = true;
-            }
-            if (JSON.parse(localStorage.getItem(response.id)).isLiked) {
-              response.isLiked = true;
-            } else if (
-              JSON.parse(localStorage.getItem(response.id)).isLiked === false
-            ) {
-              response.isLiked = false;
-            }
+            response.isAdded = JSON.parse(item).isAdded;
+            response.isLiked = JSON.parse(item).isLiked;
           }
           if (
             response.videos.results.length > 0 &&
