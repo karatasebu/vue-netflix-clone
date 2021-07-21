@@ -80,8 +80,8 @@ export default {
       slider.value.scrollLeft += (slider.value.clientWidth * 90) / 100;
       leftArrow.value = true;
       if (
-        slider.value.clientWidth + slider.value.scrollLeft * 2 >
-        Math.round(slider.value.scrollWidth / 10) * 10
+        slider.value.scrollLeft + slider.value.clientWidth * 2 >
+        slider.value.scrollWidth
       ) {
         rightArrow.value = false;
       }
