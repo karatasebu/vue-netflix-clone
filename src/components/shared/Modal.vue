@@ -1,108 +1,117 @@
 <template>
   <div class="modal">
-    <div class="modal__video">
-      <button @click="$emit('closeModal')" class="modal__btn modal__btn--close">
-        <i class="fas fa-times modal__icon"></i>
-      </button>
-      <iframe
-        class="modal__video-frame"
-        :src="`https://www.youtube.com/embed/${cardInfo.videos.results[0].key}?autoplay=1`"
-        frameborder="0"
-        allow="autoplay"
-      ></iframe>
-      <div class="modal__overlay">
-        <h3 class="modal__title">{{ cardInfo.name || cardInfo.title }}</h3>
-        <div class="modal__btns">
-          <button @click="watchMovie" class="modal__btn modal__btn--play">
-            <i class="fas fa-play modal__icon modal__icon--play"></i> Play
-          </button>
-          <button
-            v-if="!cardInfo.isAdded"
-            @click="$emit('addToList')"
-            class="modal__btn"
-          >
-            <i class="fas fa-plus modal__icon"></i>
-          </button>
-          <button
-            v-else
-            @click="$emit('removeMovie'), $emit('removeFromArr', cardInfo)"
-            class="modal__btn"
-          >
-            <i class="fas fa-check modal__icon"></i>
-          </button>
-          <button
-            @click="$emit('likeMovie')"
-            :class="[{ act: cardInfo.isLiked }, 'modal__btn']"
-          >
-            <i class="far fa-thumbs-up modal__icon"></i>
-          </button>
-          <button
-            @click="$emit('dislikeMovie')"
-            :class="[{ act: cardInfo.isLiked === false }, 'modal__btn']"
-          >
-            <i class="far fa-thumbs-down modal__icon"></i>
-          </button>
+    <div class="modal__content">
+      <div class="modal__video">
+        <button
+          @click="$emit('closeModal')"
+          class="modal__btn modal__btn--close"
+        >
+          <i class="fas fa-times modal__icon"></i>
+        </button>
+        <iframe
+          class="modal__video-frame"
+          :src="`https://www.youtube.com/embed/${cardInfo.videos.results[0].key}?autoplay=1`"
+          frameborder="0"
+          allow="autoplay"
+        ></iframe>
+        <div class="modal__overlay">
+          <h3 class="modal__title">{{ cardInfo.name || cardInfo.title }}</h3>
+          <div class="modal__btns">
+            <button @click="watchMovie" class="modal__btn modal__btn--play">
+              <i class="fas fa-play modal__icon modal__icon--play"></i> Play
+            </button>
+            <button
+              v-if="!cardInfo.isAdded"
+              @click="$emit('addToList')"
+              class="modal__btn"
+            >
+              <i class="fas fa-plus modal__icon"></i>
+            </button>
+            <button
+              v-else
+              @click="$emit('removeMovie'), $emit('removeFromArr', cardInfo)"
+              class="modal__btn"
+            >
+              <i class="fas fa-check modal__icon"></i>
+            </button>
+            <button
+              @click="$emit('likeMovie')"
+              :class="[{ act: cardInfo.isLiked }, 'modal__btn']"
+            >
+              <i class="far fa-thumbs-up modal__icon"></i>
+            </button>
+            <button
+              @click="$emit('dislikeMovie')"
+              :class="[{ act: cardInfo.isLiked === false }, 'modal__btn']"
+            >
+              <i class="far fa-thumbs-down modal__icon"></i>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="modal__info">
-      <p class="modal__overview">
-        {{ cardInfo.overview.split(".")[0] + "." }}
-      </p>
-      <div class="modal__credits">
-        <p class="modal__text">
-          <span class="modal__text--gray">Cast: </span>{{ cast }}
+      <div class="modal__info">
+        <p class="modal__overview">
+          {{ cardInfo.overview.split(".")[0] + "." }}
         </p>
-        <p class="modal__text">
-          <span class="modal__text--gray">Genres: </span>{{ genre }}
-        </p>
-      </div>
-    </div>
-    <div class="modal__related">
-      <h3 class="modal__related-title">More Like This</h3>
-      <div class="modal__cards">
-        <div :key="index" v-for="(item, index) in related" class="modal__card">
-          <div class="modal__card-main">
-            <p class="modal__card-name">{{ item.name || item.title }}</p>
-            <img
-              class="modal__card-img"
-              :src="`https://image.tmdb.org/t/p/w300${item.backdrop_path}`"
-              alt=""
-            />
-          </div>
-          <div class="modal__card-info">
-            <p class="modal__card-vote">{{ item.vote_average.toFixed(1) }}</p>
-            <p class="modal__card-date">
-              {{
-                item.release_date
-                  ? item.release_date.split("-")[0]
-                  : item.first_air_date.split("-")[0]
-              }}
-            </p>
-          </div>
-          <p class="modal__card-overview">
-            {{ item.overview.split(".")[0] + "." }}
-          </p>
-        </div>
-        <div class="modal__about">
-          <h3 class="modal__title">
-            <span class="modal__title--thin">About</span>
-            {{ cardInfo.name || cardInfo.title }}
-          </h3>
-          <p v-if="cardInfo.credits.crew.length > 0" class="modal__text">
-            <span class="modal__text--gray">Director: </span
-            >{{ cardInfo.credits.crew[0].name }}
-          </p>
+        <div class="modal__credits">
           <p class="modal__text">
             <span class="modal__text--gray">Cast: </span>{{ cast }}
-          </p>
-          <p v-if="cardInfo.credits.crew.length > 1" class="modal__text">
-            <span class="modal__text--gray">Writer: </span
-            >{{ cardInfo.credits.crew[1].name }}
           </p>
           <p class="modal__text">
             <span class="modal__text--gray">Genres: </span>{{ genre }}
           </p>
+        </div>
+      </div>
+      <div class="modal__related">
+        <h3 class="modal__related-title">More Like This</h3>
+        <div class="modal__cards">
+          <div
+            :key="index"
+            v-for="(item, index) in related"
+            class="modal__card"
+          >
+            <div class="modal__card-main">
+              <p class="modal__card-name">{{ item.name || item.title }}</p>
+              <img
+                class="modal__card-img"
+                :src="`https://image.tmdb.org/t/p/w300${item.backdrop_path}`"
+                alt=""
+              />
+            </div>
+            <div class="modal__card-info">
+              <p class="modal__card-vote">{{ item.vote_average.toFixed(1) }}</p>
+              <p class="modal__card-date">
+                {{
+                  item.release_date
+                    ? item.release_date.split("-")[0]
+                    : item.first_air_date.split("-")[0]
+                }}
+              </p>
+            </div>
+            <p class="modal__card-overview">
+              {{ item.overview.split(".")[0] + "." }}
+            </p>
+          </div>
+          <div class="modal__about">
+            <h3 class="modal__title">
+              <span class="modal__title--thin">About</span>
+              {{ cardInfo.name || cardInfo.title }}
+            </h3>
+            <p v-if="cardInfo.credits.crew.length > 0" class="modal__text">
+              <span class="modal__text--gray">Director: </span
+              >{{ cardInfo.credits.crew[0].name }}
+            </p>
+            <p class="modal__text">
+              <span class="modal__text--gray">Cast: </span>{{ cast }}
+            </p>
+            <p v-if="cardInfo.credits.crew.length > 1" class="modal__text">
+              <span class="modal__text--gray">Writer: </span
+              >{{ cardInfo.credits.crew[1].name }}
+            </p>
+            <p class="modal__text">
+              <span class="modal__text--gray">Genres: </span>{{ genre }}
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -169,22 +178,30 @@ export default {
 <style lang="scss" scoped>
 .modal {
   position: fixed;
-  top: 20px;
+  top: 0;
   left: 0;
   right: 0;
-  margin: auto;
-  width: 850px;
-  height: 100vh;
-  padding-bottom: 30px;
-  color: $color-white;
-  background: $color-background;
-  overflow: auto;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
   z-index: z-index(popup);
-  @include mq("mid-tablet", max) {
-    width: 90%;
-  }
-  &::-webkit-scrollbar {
-    display: none;
+  &__content {
+    position: fixed;
+    top: 20px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 850px;
+    height: 100vh;
+    padding-bottom: 30px;
+    color: $color-white;
+    background: $color-background;
+    overflow: auto;
+    @include mq("mid-tablet", max) {
+      width: 90%;
+    }
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
   &__video {
     position: relative;

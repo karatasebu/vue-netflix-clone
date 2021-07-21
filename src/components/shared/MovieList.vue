@@ -123,7 +123,8 @@ export default {
   &__list {
     display: flex;
     flex-direction: row;
-    overflow: scroll;
+    overflow-x: scroll;
+    overflow-y: hidden;
     scroll-behavior: smooth;
     padding: 0 5%;
     &::-webkit-scrollbar {
