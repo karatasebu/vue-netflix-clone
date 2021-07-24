@@ -20,12 +20,12 @@ export default {
   },
   setup() {
     let listInfo = [
-      { type: "movie", title: "Trending Now", genreId: 28 },
-      { type: "tv", title: "Watch It Again", genreId: 10759 },
-      { type: "movie", title: "Recently Added", genreId: 10751 },
-      { type: "tv", title: "Popular Tv Shows", genreId: 16 },
+      { type: "movie", title: "Adventure", genreId: 12 },
+      { type: "movie", title: "Animation", genreId: 16 },
+      { type: "movie", title: "Drama", genreId: 18 },
+      { type: "movie", title: "Family", genreId: 10751 },
       { type: "movie", title: "Crime & Thrillers", genreId: 80 },
-      { type: "tv", title: "Top Rated", genreId: 35 },
+      { type: "movie", title: "Science Fiction", genreId: 878 },
     ];
     let moviesHeroParam = "movie/popular";
 
